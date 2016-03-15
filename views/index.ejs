@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect();
+
+      $(document).on('keydown', function(event) {
+        switch(event.keyCode) {
+          case 38:
+            emit('up');
+            break;
+          case 40:
+            emit('down');
+            break;
+          case 37:
+            emit('left');
+            break;
+          case 39:
+            emit('right');
+            break;
+        }
+      });
+
+      function emit(event) {
+        socket.emit('input', { direction: event });
+      }
+
+      socket.on('direction', function (data) {
+        $('body').html(data.direction);
+      });
+
+    </script>
+  </body>
+</html>
