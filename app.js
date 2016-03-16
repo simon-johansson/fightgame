@@ -38,11 +38,19 @@ app.use(function(err, req, res, next) {
 });
 
 var io = socket(server);
+
 io.on('connection', function (socket) {
+
+  socket.on('new user', function(user) {
+    io.emit('new user', 'new user has joined.');
+  });
+
   socket.on('input', function (data) {
     data.timeStamp = Date.now();
     io.emit('direction', data);
   });
+
 });
+
 
 server.listen(port);
