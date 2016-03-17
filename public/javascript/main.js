@@ -1,11 +1,6 @@
 
 const socket = io.connect();
 
-function emit(event) {
-    console.log(event);
-    socket.emit('input', { direction: event });
-}
-
 const PRESSED = {};
 
 socket.on('direction', function (data) {
@@ -16,7 +11,6 @@ socket.on('direction', function (data) {
         PRESSED[data.key] = false;
     }
 });
-
 
 const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
@@ -29,39 +23,6 @@ const height = window.innerHeight;
 canvas.setAttribute('width', width);
 canvas.setAttribute('height', height);
 rootNode.appendChild(canvas);
-
-const KEYS = {
-    LEFT: 37,
-    UP: 38,
-    RIGHT: 39,
-    DOWN: 40
-};
-
-document.addEventListener('keydown', function(e) {
-    for (let key in KEYS) {
-        const which = KEYS[key];
-        if (e.which === which) {
-            socket.emit('input', {
-                type: 'keydown',
-                key: key
-            });
-            break;
-        }
-    }
-});
-
-document.addEventListener('keyup', function(e) {
-    for (let key in KEYS) {
-        const which = KEYS[key];
-        if (e.which === which) {
-            socket.emit('input', {
-                type: 'keyup',
-                key: key
-            });
-            break;
-        }
-    }
-});
 
 const entities = [];
 

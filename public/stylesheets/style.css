@@ -1,11 +1,12 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background: black;
+  background: white;
 }
 
 a {
@@ -14,4 +15,34 @@ a {
 
 #app canvas {
   display: block;
+}
+
+#input {
+  font-size: 2em;
+  text-align: center;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
+
+#input > div {
+  max-height: 33%;
+  padding: .5em;
+}
+
+#input button {
+  border: none;
+  background: pink;
+  padding: .5em 1em;
+  width: 45%;
+  min-height: 3em;
+  display: inline;
+  font: inherit;
+  font-weight: 900;
+  border-radius: .5em;
+}
+
+#input button:active,
+#input button.active {
+  background: magenta;
+  color: white;
 }
