@@ -1,5 +1,6 @@
 
 var socket = io.connect();
+socket.emit('new user');
 
 var KEYS = {
     37: 'LEFT',
@@ -10,30 +11,25 @@ var KEYS = {
 
 var buttons = Array.prototype.slice.call(document.querySelectorAll('button'));
 
-function emitStart(key) {
+function emit(key, keyEventType, classMethod) {
     if (!!key) {
         buttons.find(function(button) {
             return button.id === key;
-        }).classList.add('active');
-        console.log('emitting start', key);
+        }).classList[classMethod]('active');
+        console.log('emitting', keyEventType, key);
         socket.emit('input', {
-            type: 'keydown',
+            type: keyEventType,
             key: key
         });
     }
 }
 
+function emitStart(key) {
+    emit(key, 'keydown', 'add');
+}
+
 function emitEnd(key) {
-    if (!!key) {
-        buttons.find(function(button) {
-            return button.id === key;
-        }).classList.remove('active');
-        console.log('emitting end', key);
-        socket.emit('input', {
-            type: 'keyup',
-            key: key
-        });
-    }
+    emit(key, 'keyup', 'remove');
 }
 
 document.addEventListener('keydown', function(e) {
@@ -46,11 +42,15 @@ document.addEventListener('keyup', function(e) {
 
 buttons.forEach(function(button) {
     var id = button.id;
-    button.addEventListener('touchstart', emitStart.bind(null, id));
-    button.addEventListener('mousedown', emitStart.bind(null, id));
-    button.addEventListener('mouseup', emitEnd.bind(null, id));
-    button.addEventListener('touchend', emitEnd.bind(null, id));
-    button.addEventListener('mouseleave', emitEnd.bind(null, id));
+
+    ['touchstart', 'mousedown'].forEach(function (evType) {
+        button.addEventListener(evType, emitStart.bind(null, id));
+    });
+
+    ['mouseup', 'touchend', 'mouseleave'].forEach(function (evType) {
+        button.addEventListener(evType, emitEnd.bind(null, id));
+    });
+
     button.addEventListener('touchmove', function(e) {
         // Avoid scrolling when moving finger on button
         e.preventDefault();
