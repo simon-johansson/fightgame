@@ -25,8 +25,8 @@ describe("Game events", function() {
   it('Should broadcast new user once they connect', function(done) {
     client.emit('new user');
 
-    client.on('new user', function(msg) {
-      expect(msg).to.equal('new user has joined.');
+    client.on('player joined', function(data) {
+      expect(data.id).to.be.a('string');
 
       disconnectUser(done);
     });
@@ -38,6 +38,7 @@ describe("Game events", function() {
     client.on('direction', function(payload) {
       expect(payload.data).to.equal('UP');
       expect(payload.timeStamp).to.be.a("number");
+      expect(payload.id).to.be.a("string");
 
       disconnectUser(done);
     });
