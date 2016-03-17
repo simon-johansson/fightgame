@@ -69,30 +69,56 @@ let playerX = width / 2;
 let playerY = height / 2;
 let speedX = 0;
 let speedY = 0;
-const playerFriction = 0.97;
+const acceleration = 0.03;
+const airFriction = 0.999;
+const floorFrictionY = 0.99;
+const floorFrictionX = 0.99;
+const gravity = 0.002;
+const bounceAmount = 0.9;
+
+const floorTouchDistance = 2;
 
 const player = {
     update() {
-        if (PRESSED.UP) {
-            speedY--;
-        }
-        if (PRESSED.DOWN) {
-            speedY++;
-        }
+        const isTouchingFloor = playerY > height - floorTouchDistance || playerY < floorTouchDistance;
+        let accX = 0;
+        let accY = 0;
         if (PRESSED.LEFT) {
-            speedX--;
+            accX -= acceleration;
         }
         if (PRESSED.RIGHT) {
-            speedX++;
+            accX += acceleration;
         }
-        speedX *= playerFriction;
-        speedY *= playerFriction;
+        if (PRESSED.UP) {
+            accY -= acceleration;
+        }
+        if (PRESSED.DOWN) {
+            accY += acceleration;
+        }
+        speedX += accX;
+        speedY += accY;
         playerX += speedX;
         playerY += speedY;
+        if (playerY < height - 5) {
+            speedY += gravity;
+        }
+        if (isTouchingFloor) {
+            speedY *= floorFrictionY;
+            speedX *= floorFrictionX;
+        } else {
+            speedY *= airFriction;
+            speedX *= airFriction;
+        }
         if (playerX > width) playerX -= width;
         if (playerX < 0) playerX += width;
-        if (playerY > height) playerY -= height;
-        if (playerY < 0) playerY += height;
+        if (playerY > height) {
+            playerY = height - (playerY - height);
+            speedY *= -bounceAmount;
+        }
+        if (playerY < 0) {
+            playerY = -playerY;
+            speedY *= -bounceAmount;
+        }
     },
     draw(t) {
         context.fillStyle = '#ff0000';
@@ -114,6 +140,7 @@ function frame(t) {
         simulationT += simulationStepMs;
         simulationSteps++;
     }
+    simulationSteps = Math.min(simulationSteps, 20);
 
     context.clearRect(0, 0, width, height);
     for (let i = 0; i < entities.length; i++) {
@@ -130,8 +157,6 @@ function frame(t) {
     }
 }
 
-
 frame(0);
-
 
 
