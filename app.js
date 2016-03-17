@@ -45,16 +45,24 @@ var io = socket(server);
 
 io.on('connection', function (socket) {
 
-  socket.on('new user', function(user) {
-    io.emit('new user', 'new user has joined.');
+  socket.on('new user', function() {
+    io.emit('player joined', {
+        id: socket.id
+    });
   });
+
+  socket.on('disconnect', function() {
+    io.emit('player disconnected', {
+        id: socket.id
+    });
+ });
 
   socket.on('input', function (data) {
     data.timeStamp = Date.now();
+    data.id = socket.id;
     io.emit('direction', data);
   });
 
 });
-
 
 server.listen(port);

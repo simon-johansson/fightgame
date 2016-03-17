@@ -1,17 +1,4 @@
 
-const socket = io.connect();
-
-const PRESSED = {};
-
-socket.on('direction', function (data) {
-    if (data.type === 'keydown') {
-        PRESSED[data.key] = true;
-    }
-    if (data.type === 'keyup') {
-        PRESSED[data.key] = false;
-    }
-});
-
 const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
 
@@ -26,10 +13,6 @@ rootNode.appendChild(canvas);
 
 const entities = [];
 
-let playerX = width / 2;
-let playerY = height / 2;
-let speedX = 0;
-let speedY = 0;
 const acceleration = 0.03;
 const airFriction = 0.999;
 const floorFrictionY = 0.99;
@@ -39,57 +22,6 @@ const bounceAmount = 0.9;
 
 const floorTouchDistance = 2;
 
-const player = {
-    update() {
-        const isTouchingFloor = playerY > height - floorTouchDistance || playerY < floorTouchDistance;
-        let accX = 0;
-        let accY = 0;
-        if (PRESSED.LEFT) {
-            accX -= acceleration;
-        }
-        if (PRESSED.RIGHT) {
-            accX += acceleration;
-        }
-        if (PRESSED.UP) {
-            accY -= acceleration;
-        }
-        if (PRESSED.DOWN) {
-            accY += acceleration;
-        }
-        speedX += accX;
-        speedY += accY;
-        playerX += speedX;
-        playerY += speedY;
-        if (playerY < height - 5) {
-            speedY += gravity;
-        }
-        if (isTouchingFloor) {
-            speedY *= floorFrictionY;
-            speedX *= floorFrictionX;
-        } else {
-            speedY *= airFriction;
-            speedX *= airFriction;
-        }
-        if (playerX > width) playerX -= width;
-        if (playerX < 0) playerX += width;
-        if (playerY > height) {
-            playerY = height - (playerY - height);
-            speedY *= -bounceAmount;
-        }
-        if (playerY < 0) {
-            playerY = -playerY;
-            speedY *= -bounceAmount;
-        }
-    },
-    draw(t) {
-        context.fillStyle = '#ff0000';
-        context.fillRect(playerX - 10, playerY - 10, 20, 20);
-    }
-};
-
-entities.push(player);
-
-let frameT = 0;
 let simulationT = 0;
 const simulationStepMs = 5;
 
