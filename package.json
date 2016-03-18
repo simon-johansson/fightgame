@@ -2,6 +2,7 @@
   "name": "fightgame",
   "version": "0.0.0",
   "private": true,
+  "license": "UNLICENSED",
   "scripts": {
     "start": "node app.js",
     "test": "mocha -R spec",
