@@ -1,46 +1,104 @@
+
 var expect = require('chai').expect;
+var request = require('request');
 var io = require('socket.io-client');
 var server = require('../app');
 
-var socketURL = 'http://localhost:3000';
+var URL = 'http://localhost:' + server.get('port');
 
 var options = {
-  transports: ['websocket'],
-  'force new connection': true
+    transports: ['websocket'],
+    'force new connection': true
 };
 
-describe("Game events", function() {
-  var client;
-  var disconnectUser = function (done) {
-    client.disconnect();
-    client = null;
-    done();
-  };
+describe('Socket events', function() {
 
-  beforeEach(function () {
-    client = io.connect(socketURL, options);
-    client.on('connect', function () {});
-  });
+    var disconnectClient = function(client) {
+        client.disconnect();
+        client = null;
+    };
 
-  it('Should broadcast new user once they connect', function(done) {
-    client.emit('new user');
+    var createClient = function() {
+        var client = io.connect(URL, options);
+        client.on('connect', function() {});
+        return client;
+    };
 
-    client.on('player joined', function(data) {
-      expect(data.id).to.be.a('string');
+    it('Should broadcast new user once they connect', function(done) {
+        var client = createClient();
+        client.emit('new user');
 
-      disconnectUser(done);
+        client.on('player joined', function(data) {
+            expect(data.id).to.be.a('string');
+
+            disconnectClient(client);
+            done();
+        });
     });
-  });
 
-  it('Should broadcast keybaord inputs', function(done){
-    client.emit('input', {data: 'UP'});
+    it('Should broadcast disconnected user once they disconnect', function(done) {
+        var client1 = createClient();
+        var client2 = createClient();
 
-    client.on('direction', function(payload) {
-      expect(payload.data).to.equal('UP');
-      expect(payload.timeStamp).to.be.a("number");
-      expect(payload.id).to.be.a("string");
+        disconnectClient(client1);
 
-      disconnectUser(done);
+        client2.on('player disconnected', function(data) {
+            expect(data.id).to.be.a('string');
+
+            disconnectClient(client2);
+            done();
+        });
     });
-  });
+
+    it('Should broadcast keyboard inputs', function(done) {
+        var client = createClient();
+        client.emit('input', { data: 'UP' });
+
+        client.on('direction', function(payload) {
+            expect(payload.data).to.equal('UP');
+            expect(payload.timeStamp).to.be.a('number');
+            expect(payload.id).to.be.a('string');
+
+            disconnectClient(client);
+            done();
+        });
+    });
 });
+
+describe('Page requests', function () {
+
+    it('/', function (done) {
+        request.get(URL, function(error, response, body) {
+            var type = response.headers["content-type"].split(";")[0];
+
+            expect(error).to.be.null;
+            expect(type).to.equal('text/html');
+            expect(body).to.contain('/socket.io/socket.io.js');
+            expect(body).to.contain('<title>Fajt - host</title>');
+            done()
+        });
+    });
+
+    it('/input', function (done) {
+        request.get(URL + '/input', function(error, response, body) {
+            var type = response.headers["content-type"].split(";")[0];
+
+            expect(error).to.be.null;
+            expect(type).to.equal('text/html');
+            expect(body).to.contain('/socket.io/socket.io.js');
+            expect(body).to.contain('<title>Fajt - controller</title>');
+            done()
+        });
+    });
+
+    it('error page', function (done) {
+        request.get(URL + '/is-not-found', function(error, response, body) {
+            var type = response.headers["content-type"].split(";")[0];
+
+            expect(error).to.be.null;
+            expect(type).to.equal('text/html');
+            expect(body).to.contain('<h1>Not Found</h1>\n<h2>404</h2>\n<pre>Error: Not Found');
+            done()
+        });
+    });
+})
