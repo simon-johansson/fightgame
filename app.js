@@ -55,7 +55,7 @@ io.on('connection', function (socket) {
     io.emit('player disconnected', {
         id: socket.id
     });
- });
+  });
 
   socket.on('input', function (data) {
     data.timeStamp = Date.now();

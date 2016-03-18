@@ -1,12 +1,12 @@
 
 function Player(id) {
-     this.id = id;
-     this.pressed = {};
-     this.x = width / 2;
-     this.y = height / 2;
-     this.speedX = 0;
-     this.speedY = 0;
-     this.color = getRandomColor();
+    this.id = id;
+    this.pressed = {};
+    this.x = width / 2;
+    this.y = height / 2;
+    this.speedX = 0;
+    this.speedY = 0;
+    this.color = getRandomColor();
 }
 
 Player.prototype.update = function () {
