@@ -12,7 +12,7 @@ var KEYS = {
 var buttons = Array.prototype.slice.call(document.querySelectorAll('button'));
 
 function emit(key, keyEventType, classMethod) {
-    if (!!key) {
+    if (key) {
         buttons.find(function(button) {
             return button.id === key;
         }).classList[classMethod]('active');
@@ -43,11 +43,11 @@ document.addEventListener('keyup', function(e) {
 buttons.forEach(function(button) {
     var id = button.id;
 
-    ['touchstart', 'mousedown'].forEach(function (evType) {
+    ['touchstart', 'mousedown'].forEach(function(evType) {
         button.addEventListener(evType, emitStart.bind(null, id));
     });
 
-    ['mouseup', 'touchend', 'mouseleave'].forEach(function (evType) {
+    ['mouseup', 'touchend', 'mouseleave'].forEach(function(evType) {
         button.addEventListener(evType, emitEnd.bind(null, id));
     });
 

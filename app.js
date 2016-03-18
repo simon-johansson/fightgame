@@ -1,14 +1,14 @@
 
-var path = require('path');
-var http = require('http');
+const path = require('path');
+const http = require('http');
 
-var express = require('express');
-var socket = require('socket.io');
+const express = require('express');
+const socket = require('socket.io');
 
-var port = process.env.PORT || '3000';
-var app = express();
+const port = process.env.PORT || '3000';
+const app = express();
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 app.set('port', port);
 
@@ -28,7 +28,7 @@ app.get('/input', function(req, res, next) {
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -41,23 +41,23 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var io = socket(server);
+const io = socket(server);
 
-io.on('connection', function (socket) {
+io.on('connection', function(socket) {
 
   socket.on('new user', function() {
     io.emit('player joined', {
-        id: socket.id
+      id: socket.id
     });
   });
 
   socket.on('disconnect', function() {
     io.emit('player disconnected', {
-        id: socket.id
+      id: socket.id
     });
   });
 
-  socket.on('input', function (data) {
+  socket.on('input', function(data) {
     data.timeStamp = Date.now();
     data.id = socket.id;
     io.emit('direction', data);

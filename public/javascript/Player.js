@@ -9,7 +9,7 @@ function Player(id) {
     this.color = getRandomColor();
 }
 
-Player.prototype.update = function () {
+Player.prototype.update = function() {
     const isTouchingFloor = this.y > height - floorTouchDistance || this.y < floorTouchDistance;
     let accX = 0;
     let accY = 0;
@@ -49,9 +49,9 @@ Player.prototype.update = function () {
         this.y = -this.y;
         this.speedY *= -bounceAmount;
     }
-}
+};
 
-Player.prototype.draw = function () {
+Player.prototype.draw = function() {
     context.fillStyle = this.color;
     context.fillRect(this.x - 10, this.y - 10, 20, 20);
-}
+};
