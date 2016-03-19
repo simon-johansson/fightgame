@@ -6,9 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "test": "NODE_ENV=production npm run lint && mocha -R spec",
-    "lint": "eslint -c .eslintrc.json app.js public/",
+    "lint": "eslint -c .eslintrc.json app.js src/",
     "clean": "rimraf dist",
-    "copy": "mkdir -p dist/ && cp -r public/{images,stylesheets} dist/",
+    "copy": "mkdir -p dist/ && cp -r public/* dist/",
     "webpack": "webpack --config ./webpack.production.config.js --progress --profile --colors",
     "build": "npm run clean && npm run copy && npm run webpack",
     "heroku-postbuild": "npm run build"
