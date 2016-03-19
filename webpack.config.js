@@ -7,12 +7,12 @@ module.exports = {
     devtool: 'eval-source-map',
     entry: [
         'webpack-hot-middleware/client?reload=true',
-        path.join(__dirname, 'public/javascript/test.js')
+        path.join(__dirname, 'public/src/main.js')
     ],
     output: {
         path: __dirname,
         filename: 'bundle.js',
-        publicPath: '/javascript/'
+        publicPath: '/javascript'
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
