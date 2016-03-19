@@ -21,6 +21,10 @@ export default function onDraw(z, fn) {
         drawHandlers[zIndex] = [];
     }
     drawHandlers[zIndex].push(fn);
+    return function removeHandler() {
+        const index = drawHandlers[zIndex].indexOf(fn);
+        drawHandlers[zIndex].splice(index, 1);
+    }
 }
 
 function invokeDrawHandlers(time) {

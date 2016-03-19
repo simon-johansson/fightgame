@@ -29,9 +29,7 @@ export default function player(playerId) {
     let speedY = 0;
     let color = getRandomColor();
 
-    let isAlive = true;
-
-    socket.onInput(function(data) {
+    const stopInput = socket.onInput(function(data) {
         if (data.id === id) {
             switch (data.type) {
                 case 'keydown':
@@ -44,14 +42,7 @@ export default function player(playerId) {
         }
     });
 
-    socket.onPlayerDisconnect(function(data) {
-        if (data.id === id) {
-            isAlive = false;
-        }
-    });
-
-    onSimulation(function(simTime) {
-        if (!isAlive) return;
+    const stopSimulation = onSimulation(function(simTime) {
         const isTouchingFloor = y > height - floorTouchDistance || y < floorTouchDistance;
         let accX = 0;
         let accY = 0;
@@ -93,8 +84,7 @@ export default function player(playerId) {
         }
     });
 
-    onDraw(1, function(time) {
-        if (!isAlive) return;
+    const stopDrawing = onDraw(1, function(time) {
         context.fillStyle = color;
         context.fillRect(
             Math.round(x - 10),
@@ -102,6 +92,16 @@ export default function player(playerId) {
             20,
             20
         );
+    });
+
+    const stopDisconnect = socket.onPlayerDisconnect(function(data) {
+        if (data.id === id) {
+            // Clean up all event listeners
+            stopInput();
+            stopSimulation();
+            stopDrawing();
+            stopDisconnect();
+        }
     });
 }
 

@@ -1,14 +1,11 @@
 
 const socket = io.connect();
 
-export function onPlayerJoin(fn) {
-    socket.on('player joined', fn);
-}
+const socketEventHandler = eventName => fn => (
+    socket.on(eventName, fn),
+    () => socket.off(eventName, fn)
+);
 
-export function onPlayerDisconnect(fn) {
-    socket.on('player disconnected', fn);
-}
-
-export function onInput(fn) {
-    socket.on('direction', fn);
-}
+export const onPlayerJoin = socketEventHandler('played joined');
+export const onPlayerDisconnect = socketEventHandler('played disconnected');
+export const onInput = socketEventHandler('direction');
