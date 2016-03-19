@@ -1,5 +1,5 @@
 
-import {getRandomColor} from './utils';
+import {getRandomColor} from '../utils';
 
 import {
     acceleration,
@@ -13,7 +13,7 @@ import {
     height,
     context,
     entities
-} from './constants';
+} from '../constants';
 
 export default class Player {
     constructor(id) {

@@ -1,5 +1,5 @@
 
-import Player from './Player';
+import Player from './entities/Player';
 import {entities} from './constants';
 
 const socket = io.connect();
