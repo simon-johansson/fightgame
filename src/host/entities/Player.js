@@ -1,11 +1,15 @@
 
 import {getRandomColor} from '../utils';
 
+import onFrame from '../events/onFrame';
+import onSimulation from '../events/onSimulation';
+import onDraw from '../events/onDraw';
+import * as socket from '../events/onSocket';
+
 import {
     width,
     height,
-    context,
-    entities
+    context
 } from '../constants';
 
 const acceleration = 0.03;
@@ -16,66 +20,90 @@ const gravity = 0.002;
 const bounceAmount = 0.9;
 const floorTouchDistance = 2;
 
-export default class Player {
-    constructor(id) {
-        this.id = id;
-        this.pressed = {};
-        this.x = width / 2;
-        this.y = height / 2;
-        this.speedX = 0;
-        this.speedY = 0;
-        this.color = getRandomColor();
-    }
+export default function player(playerId) {
+    let id = playerId;
+    let pressed = {};
+    let x = width / 2;
+    let y = height / 2;
+    let speedX = 0;
+    let speedY = 0;
+    let color = getRandomColor();
 
-    update() {
-        const isTouchingFloor = this.y > height - floorTouchDistance || this.y < floorTouchDistance;
+    let isAlive = true;
+
+    socket.onInput(function(data) {
+        if (data.id === id) {
+            switch (data.type) {
+                case 'keydown':
+                    pressed[data.key] = true;
+                    break;
+                case 'keyup':
+                    pressed[data.key] = false;
+                    break;
+            }
+        }
+    });
+
+    socket.onPlayerDisconnect(function(data) {
+        if (data.id === id) {
+            isAlive = false;
+        }
+    });
+
+    onSimulation(function(simTime) {
+        if (!isAlive) return;
+        const isTouchingFloor = y > height - floorTouchDistance || y < floorTouchDistance;
         let accX = 0;
         let accY = 0;
-        if (this.pressed.LEFT) {
+        if (pressed.LEFT) {
             accX -= acceleration;
         }
-        if (this.pressed.RIGHT) {
+        if (pressed.RIGHT) {
             accX += acceleration;
         }
-        if (this.pressed.UP) {
+        if (pressed.UP) {
             accY -= acceleration;
         }
-        if (this.pressed.DOWN) {
+        if (pressed.DOWN) {
             accY += acceleration;
         }
-        this.speedX += accX;
-        this.speedY += accY;
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.y < height - 5) {
-            this.speedY += gravity;
+        speedX += accX;
+        speedY += accY;
+        x += speedX;
+        y += speedY;
+        if (y < height - 5) {
+            speedY += gravity;
         }
         if (isTouchingFloor) {
-            this.speedY *= floorFrictionY;
-            this.speedX *= floorFrictionX;
+            speedY *= floorFrictionY;
+            speedX *= floorFrictionX;
         } else {
-            this.speedY *= airFriction;
-            this.speedX *= airFriction;
+            speedY *= airFriction;
+            speedX *= airFriction;
         }
-        if (this.x > width) this.x -= width;
-        if (this.x < 0) this.x += width;
-        if (this.y > height) {
-            this.y = height - (this.y - height);
-            this.speedY *= -bounceAmount;
+        if (x > width) x -= width;
+        if (x < 0) x += width;
+        if (y > height) {
+            y = height - (y - height);
+            speedY *= -bounceAmount;
         }
-        if (this.y < 0) {
-            this.y = -this.y;
-            this.speedY *= -bounceAmount;
+        if (y < 0) {
+            y = -y;
+            speedY *= -bounceAmount;
         }
-    }
+    });
 
-    draw() {
-        context.fillStyle = this.color;
+    onDraw(1, function(time) {
+        if (!isAlive) return;
+        context.fillStyle = color;
         context.fillRect(
-            Math.round(this.x - 10),
-            Math.round(this.y - 10),
+            Math.round(x - 10),
+            Math.round(y - 10),
             20,
             20
         );
-    }
+    });
 }
+
+
+
