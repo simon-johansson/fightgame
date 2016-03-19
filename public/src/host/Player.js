@@ -1,5 +1,5 @@
 
-import { getRandomColor } from './utils';
+import {getRandomColor} from './utils';
 
 import {
     acceleration,

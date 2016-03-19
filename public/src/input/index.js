@@ -1,15 +1,15 @@
 
-var socket = io.connect();
+const socket = io.connect();
 socket.emit('new user');
 
-var KEYS = {
+const KEYS = {
     37: 'LEFT',
     38: 'UP',
     39: 'RIGHT',
     40: 'DOWN'
 };
 
-var buttons = Array.prototype.slice.call(document.querySelectorAll('button'));
+const buttons = Array.prototype.slice.call(document.querySelectorAll('button'));
 
 function emit(key, keyEventType, classMethod) {
     if (key) {
@@ -41,7 +41,7 @@ document.addEventListener('keyup', function(e) {
 });
 
 buttons.forEach(function(button) {
-    var id = button.id;
+    const id = button.id;
 
     ['touchstart', 'mousedown'].forEach(function(evType) {
         button.addEventListener(evType, emitStart.bind(null, id));

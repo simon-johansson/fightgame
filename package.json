@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "test": "NODE_ENV=production npm run lint && mocha -R spec",
-    "lint": "eslint app.js public/**/*.js -c .eslintrc.json",
+    "lint": "eslint -c .eslintrc.json app.js public/",
     "clean": "rimraf dist",
     "copy": "mkdir -p dist/ && cp -r public/{images,stylesheets} dist/",
     "webpack": "webpack --config ./webpack.production.config.js --progress --profile --colors",

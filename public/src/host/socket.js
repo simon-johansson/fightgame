@@ -1,6 +1,6 @@
 
 import Player from './Player';
-import { entities } from './constants';
+import {entities} from './constants';
 
 const socket = io.connect();
 
