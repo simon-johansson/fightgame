@@ -1,3 +1,7 @@
+
+import Player from './Player';
+import { entities } from './constants';
+
 const socket = io.connect();
 
 socket.on('player joined', function(data) {

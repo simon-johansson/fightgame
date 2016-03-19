@@ -1,26 +1,18 @@
 
-const canvas = document.createElement('canvas');
-const context = canvas.getContext('2d');
+import socket from './socket';
 
-const rootNode = document.getElementById('app');
-
-const width = window.innerWidth;
-const height = window.innerHeight;
+import {
+    canvas,
+    context,
+    rootNode,
+    width,
+    height,
+    entities
+} from './constants';
 
 canvas.setAttribute('width', width);
 canvas.setAttribute('height', height);
 rootNode.appendChild(canvas);
-
-const entities = [];
-
-const acceleration = 0.03;
-const airFriction = 0.999;
-const floorFrictionY = 0.99;
-const floorFrictionX = 0.99;
-const gravity = 0.002;
-const bounceAmount = 0.9;
-
-const floorTouchDistance = 2;
 
 let simulationT = 0;
 const simulationStepMs = 5;
