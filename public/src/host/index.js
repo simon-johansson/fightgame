@@ -20,6 +20,18 @@ const simulationStepMs = 5;
 function frame(t) {
     requestAnimationFrame(frame);
 
+    updateEntities(t);
+
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, width, height);
+    for (let i = 0; i < entities.length; i++) {
+        if (entities[i].draw) {
+            entities[i].draw(t);
+        }
+    }
+}
+
+function updateEntities(t = performance.now()) {
     let simulationSteps = 0;
     while (simulationT < t) {
         simulationT += simulationStepMs;
@@ -27,7 +39,6 @@ function frame(t) {
     }
     simulationSteps = Math.min(simulationSteps, 20);
 
-    context.clearRect(0, 0, width, height);
     for (let i = 0; i < entities.length; i++) {
         if (entities[i].update) {
             for (let step = 0; step < simulationSteps; step++) {
@@ -35,9 +46,10 @@ function frame(t) {
             }
         }
     }
-    for (let i = 0; i < entities.length; i++) {
-        if (entities[i].draw) {
-            entities[i].draw(t);
+}
+
+setInterval(updateEntities, 4);
+
         }
     }
 }
