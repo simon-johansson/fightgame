@@ -7,9 +7,9 @@
     "start": "node app.js",
     "test": "NODE_ENV=production npm run lint && mocha -R spec",
     "lint": "eslint app.js public/**/*.js -c .eslintrc.json",
-    "clean": "rimraf dist",
+    "clean": "./node_modules/.bin/rimraf dist",
     "copy": "mkdir -p dist/ && cp -r public/{images,stylesheets} dist/",
-    "webpack": "webpack --config ./webpack.production.config.js --progress --profile --colors",
+    "webpack": "./node_modules/.bin/webpack --config ./webpack.production.config.js --progress --profile --colors",
     "build": "npm run clean && npm run copy && npm run webpack",
     "postinstall": "npm run build"
   },
