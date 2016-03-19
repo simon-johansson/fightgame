@@ -50,9 +50,7 @@ function updateEntities(t = performance.now()) {
 
 setInterval(updateEntities, 4);
 
-        }
-    }
-}
+import './entities/fps';
 
 frame(0);
 
