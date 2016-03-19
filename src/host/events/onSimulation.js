@@ -11,7 +11,7 @@ export default function onSimulation(fn) {
     return function removeHandler() {
         const index = simulationHandlers.indexOf(fn);
         simulationHandlers.splice(index, 1);
-    }
+    };
 }
 
 let simulationTime = 0;

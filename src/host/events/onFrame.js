@@ -8,7 +8,7 @@ export default function onFrame(fn) {
     return function removeHandler() {
         const index = frameHandlers.indexOf(fn);
         frameHandlers.splice(index, 1);
-    }
+    };
 }
 
 function invokeFrameHandlers(time) {
