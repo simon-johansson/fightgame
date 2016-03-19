@@ -6,6 +6,6 @@ const socketEventHandler = eventName => fn => (
     () => socket.off(eventName, fn)
 );
 
-export const onPlayerJoin = socketEventHandler('played joined');
-export const onPlayerDisconnect = socketEventHandler('played disconnected');
+export const onPlayerJoin = socketEventHandler('player joined');
+export const onPlayerDisconnect = socketEventHandler('player disconnected');
 export const onInput = socketEventHandler('direction');
