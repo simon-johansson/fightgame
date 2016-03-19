@@ -1,5 +1,5 @@
 
-import {context} from '../constants';
+import {context} from '../canvas/canvas';
 import onDraw from '../events/onDraw';
 
 let seconds = 0;

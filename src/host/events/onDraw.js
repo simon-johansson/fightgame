@@ -2,7 +2,7 @@
 onDraw(zIndex, fn), will be called on each frame, with order determined by zIndex */
 
 import onFrame from './onFrame';
-import {width, height, context} from '../constants';
+import {width, height, context} from '../canvas/canvas';
 
 const drawHandlers = [[]];
 

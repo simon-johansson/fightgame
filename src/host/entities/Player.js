@@ -6,11 +6,7 @@ import onSimulation from '../events/onSimulation';
 import onDraw from '../events/onDraw';
 import * as socket from '../events/onSocket';
 
-import {
-    width,
-    height,
-    context
-} from '../constants';
+import {width, height, context} from '../canvas/canvas';
 
 const acceleration = 0.03;
 const airFriction = 0.999;
