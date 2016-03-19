@@ -2,18 +2,19 @@
 import {getRandomColor} from '../utils';
 
 import {
-    acceleration,
-    airFriction,
-    floorFrictionY,
-    floorFrictionX,
-    gravity,
-    bounceAmount,
-    floorTouchDistance,
     width,
     height,
     context,
     entities
 } from '../constants';
+
+const acceleration = 0.03;
+const airFriction = 0.999;
+const floorFrictionY = 0.99;
+const floorFrictionX = 0.99;
+const gravity = 0.002;
+const bounceAmount = 0.9;
+const floorTouchDistance = 2;
 
 export default class Player {
     constructor(id) {
