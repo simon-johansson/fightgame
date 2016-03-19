@@ -70,6 +70,11 @@ export default class Player {
 
     draw() {
         context.fillStyle = this.color;
-        context.fillRect(this.x - 10, this.y - 10, 20, 20);
+        context.fillRect(
+            Math.round(this.x - 10),
+            Math.round(this.y - 10),
+            20,
+            20
+        );
     }
 }

@@ -7,8 +7,8 @@ export const gravity = 0.002;
 export const bounceAmount = 0.9;
 export const floorTouchDistance = 2;
 
-export const width = window.innerWidth;
-export const height = window.innerHeight;
+export const width = 800;
+export const height = 600;
 export const canvas = document.createElement('canvas');
 export const context = canvas.getContext('2d');
 export const rootNode = document.getElementById('app');
